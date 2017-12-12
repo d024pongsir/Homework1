@@ -205,6 +205,12 @@
     <Compile Include="Models\View_1Repository.cs">
       <DependentUpon>IRepository.EF6.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\客戶分類.cs">
+      <DependentUpon>Client.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\客戶分類Repository.cs">
+      <DependentUpon>IRepository.EF6.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\客戶聯絡人.cs">
       <DependentUpon>Client.tt</DependentUpon>
     </Compile>
@@ -307,6 +313,9 @@
     <Content Include="Views\客戶聯絡人\Edit.cshtml" />
     <Content Include="Views\客戶聯絡人\Details.cshtml" />
     <Content Include="Views\客戶資料\Index.cshtml" />
+    <Content Include="Views\客戶資料\Create.cshtml" />
+    <Content Include="Views\客戶資料\Edit.cshtml" />
+    <Content Include="Views\客戶資料\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
