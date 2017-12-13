@@ -12,6 +12,10 @@
 @using (Html.BeginForm())
 {
     <input type="text" name="search_input" value="@ViewBag.search_input" />
+
+    @Html.Hidden("dropdown_selected")
+    @Html.DropDownList("tester", null, "請選擇客戶分類", new { id = "tester_id", onchange = "dropdown_selected.value = $('#tester_id').val(); this.form.submit();" })
+
     <input type="submit" value="搜尋" class="btn btn-default" />
 }
 <table class="table">

@@ -15,23 +15,30 @@ namespace WebApplication1.Controllers
         // GET: 客戶資料
         public ActionResult Index()
         {
+            var 客戶分類repo = RepositoryHelper.Get客戶分類Repository();
+            var data = new SelectList(客戶分類repo.All(), "Id", "客戶分類說明");
+            ViewBag.tester = data;
+ 
             return View(repo.All());
         }
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult Index(string search_input)
+        public ActionResult Index(string search_input, string dropdown_selected)
         {
-            if (string.IsNullOrEmpty(search_input))
+            if (string.IsNullOrEmpty(search_input) && string.IsNullOrEmpty(dropdown_selected))
             {
                 return RedirectToAction("Index");
             }
 
-            var data = repo.All().Where(p => p.客戶名稱.Contains(search_input) || p.統一編號.Contains(search_input) ||
-                p.電話.Contains(search_input) || p.傳真.Contains(search_input) ||
-                p.地址.Contains(search_input) || p.Email.Contains(search_input)
-            );
+            var data = repo.資料篩選邏輯寫在repo類別內(search_input, dropdown_selected);
+
             ViewBag.search_input = search_input;
+
+            var 客戶分類repo = RepositoryHelper.Get客戶分類Repository();
+            var ddlitems = new SelectList(客戶分類repo.All(), "Id", "客戶分類說明", dropdown_selected);
+            ViewBag.tester = ddlitems;
+
             return View(data);
         }
 

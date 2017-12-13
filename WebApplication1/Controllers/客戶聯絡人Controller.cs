@@ -15,18 +15,43 @@ namespace WebApplication1.Controllers
         public ActionResult Index()
         {
             var data = db.客戶聯絡人.Where(p => !p.IsDeleted).ToList();
+
+            var listsrc = db.客戶聯絡人.Select(p => p.職稱).Distinct();
+            List<SelectListItem> 職稱list = new List<SelectListItem>();
+            foreach (var 職稱 in listsrc)
+            {
+                職稱list.Add(new SelectListItem() {  Text = 職稱, Value = 職稱  });
+            }
+
+            ViewBag.tester = new SelectList(職稱list, "Value", "Text"); ;
+
             return View(data);
         }
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult Index(string search_input)
+        public ActionResult Index(string search_input, string dropdown_selected)
         {
             var data = db.客戶聯絡人.Where(p => !p.IsDeleted).Where(p =>
             p.職稱.Contains(search_input) || p.姓名.Contains(search_input) || p.Email.Contains(search_input) ||
             p.手機.Contains(search_input) || p.電話.Contains(search_input)).ToList();
 
+            if (!string.IsNullOrEmpty(dropdown_selected))
+            {
+                data = data.Where(p => p.職稱 == dropdown_selected).ToList();
+            }
+
             ViewBag.search_input = search_input;
+
+            var listsrc = db.客戶聯絡人.Select(p => p.職稱).Distinct();
+            List<SelectListItem> 職稱list = new List<SelectListItem>();
+            foreach (var 職稱 in listsrc)
+            {
+                職稱list.Add(new SelectListItem() { Text = 職稱, Value = 職稱 });
+            }
+
+            ViewBag.tester = new SelectList(職稱list, "Value", "Text", dropdown_selected); 
+
             return View(data);
         }
 
