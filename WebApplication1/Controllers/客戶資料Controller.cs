@@ -5,6 +5,10 @@ using System.Web;
 using System.Web.Mvc;
 
 using WebApplication1.Models;
+using WebApplication1.Models.CustomResults;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Data;
 
 namespace WebApplication1.Controllers
 {
@@ -21,23 +25,60 @@ namespace WebApplication1.Controllers
  
             return View(repo.All());
         }
+        private JArray GetExportData(List<客戶資料> data)
+        {
+            JArray jObjects = new JArray();
+
+            foreach (var item in data)
+            {
+                var jo = new JObject();
+                jo.Add("Id", item.Id);
+                jo.Add("客戶名稱", item.客戶名稱);
+                jo.Add("統一編號", item.統一編號);
+                jo.Add("電話", item.電話);
+                jo.Add("傳真", item.傳真);
+                jo.Add("地址", item.地址);
+                jo.Add("Email", item.Email);
+                jo.Add("客戶分類", item.客戶分類.客戶分類說明);
+                jObjects.Add(jo);
+            }
+            return jObjects;
+        }
+
+        public ActionResult GetAllExcelDataPengVersion(string search_input, string dropdown_selected, string sortby)
+        {
+            var data = repo.資料篩選邏輯寫在repo類別內(search_input, dropdown_selected, sortby).ToList();
+
+            var exportSpource = this.GetExportData(data);
+            var dt = JsonConvert.DeserializeObject<DataTable>(exportSpource.ToString());
+
+            var exportFileName = string.Concat(
+                "aaaa_",
+                DateTime.Now.ToString("yyyyMMddHHmmss"),
+                ".xlsx");
+
+            ExportExcelPeng nv = new ExportExcelPeng("客戶資料", exportFileName, dt);
+            return nv.取得FileStreamResult();
+        }
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public ActionResult Index(string search_input, string dropdown_selected, string sortby)
         {
-            if (string.IsNullOrEmpty(search_input) && string.IsNullOrEmpty(dropdown_selected) && string.IsNullOrEmpty(sortby))
-            {
-                return RedirectToAction("Index");
-            }
+            //if (string.IsNullOrEmpty(search_input) && string.IsNullOrEmpty(dropdown_selected) && string.IsNullOrEmpty(sortby))
+            //{
+            //    return RedirectToAction("Index");
+            //}
 
-            var data = repo.資料篩選邏輯寫在repo類別內(search_input, dropdown_selected, sortby);
+            var data = repo.資料篩選邏輯寫在repo類別內(search_input, dropdown_selected, sortby).ToList();
 
             ViewBag.search_input = search_input;
+            ViewBag.sortby = sortby;
 
             var 客戶分類repo = RepositoryHelper.Get客戶分類Repository();
             var ddlitems = new SelectList(客戶分類repo.All(), "Id", "客戶分類說明", dropdown_selected);
             ViewBag.tester = ddlitems;
+            ViewBag.dropdown_selected = dropdown_selected;
 
             return View(data);
         }

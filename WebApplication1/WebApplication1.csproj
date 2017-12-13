@@ -189,6 +189,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Client.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomResults\ExportExcelPeng.cs" />
     <Compile Include="Models\DataTypes\手機電話格式Attribute.cs" />
     <Compile Include="Models\EFGeneratePartialClass.cs">
       <AutoGen>True</AutoGen>
