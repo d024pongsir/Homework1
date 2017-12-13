@@ -2,6 +2,10 @@
 
 @{
     ViewBag.Title = "Index";
+
+    Dictionary<string, object> Dictionary = new Dictionary<string, object>() {
+        { "id", "mytestid" }
+    };
 }
 
 <h2>Index</h2>
@@ -9,7 +13,7 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "客戶聯絡人", FormMethod.Post, Dictionary))
 {
     <input type="text" name="search_input" value="@ViewBag.search_input" />
 
@@ -17,31 +21,70 @@
     @Html.DropDownList("tester", null, "請選擇職稱", new { id = "tester_id", onchange = "dropdown_selected.value = $('#tester_id').val(); this.form.submit();" })
 
     <input type="submit" value="搜尋" class="btn btn-default" />
-}
+
+    <input id="sortby" name="sortby" type="hidden" value="@ViewBag.sortby" />
+
 <table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.職稱)
+            <a href="#" id="sort1" onclick="document.getElementById('sortby').value='1asc';document.getElementById('mytestid').submit();">
+                <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+            </a>
+            <a href="#" id="sort2" onclick="document.getElementById('sortby').value='1desc';document.getElementById('mytestid').submit();">
+                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+            </a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.姓名)
+            <a href="#" id="sort3" onclick="document.getElementById('sortby').value='2asc';document.getElementById('mytestid').submit();">
+                <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+            </a>
+            <a href="#" id="sort4" onclick="document.getElementById('sortby').value='2desc';document.getElementById('mytestid').submit();">
+                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+            </a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Email)
+            <a href="#" id="sort5" onclick="document.getElementById('sortby').value='3asc';document.getElementById('mytestid').submit();">
+                <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+            </a>
+            <a href="#" id="sort6" onclick="document.getElementById('sortby').value='3desc';document.getElementById('mytestid').submit();">
+                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+            </a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.手機)
+            <a href="#" id="sort7" onclick="document.getElementById('sortby').value='4asc';document.getElementById('mytestid').submit();">
+                <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+            </a>
+            <a href="#" id="sort8" onclick="document.getElementById('sortby').value='4desc';document.getElementById('mytestid').submit();">
+                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+            </a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.電話)
+            <a href="#" id="sort9" onclick="document.getElementById('sortby').value='5asc';document.getElementById('mytestid').submit();">
+                <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+            </a>
+            <a href="#" id="sort10" onclick="document.getElementById('sortby').value='5desc';document.getElementById('mytestid').submit();">
+                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+            </a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.客戶資料.客戶名稱)
+            <a href="#" id="sort11" onclick="document.getElementById('sortby').value='6asc';document.getElementById('mytestid').submit();">
+                <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+            </a>
+            <a href="#" id="sort12" onclick="document.getElementById('sortby').value='6desc';document.getElementById('mytestid').submit();">
+                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+            </a>
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.職稱)
@@ -62,11 +105,13 @@
             @Html.DisplayFor(modelItem => item.客戶資料.客戶名稱)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
         </td>
     </tr>
 }
 
 </table>
+
+}

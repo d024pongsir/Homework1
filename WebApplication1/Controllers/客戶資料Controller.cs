@@ -24,14 +24,14 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult Index(string search_input, string dropdown_selected)
+        public ActionResult Index(string search_input, string dropdown_selected, string sortby)
         {
-            if (string.IsNullOrEmpty(search_input) && string.IsNullOrEmpty(dropdown_selected))
+            if (string.IsNullOrEmpty(search_input) && string.IsNullOrEmpty(dropdown_selected) && string.IsNullOrEmpty(sortby))
             {
                 return RedirectToAction("Index");
             }
 
-            var data = repo.資料篩選邏輯寫在repo類別內(search_input, dropdown_selected);
+            var data = repo.資料篩選邏輯寫在repo類別內(search_input, dropdown_selected, sortby);
 
             ViewBag.search_input = search_input;
 

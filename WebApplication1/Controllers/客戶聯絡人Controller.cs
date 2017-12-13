@@ -30,7 +30,7 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult Index(string search_input, string dropdown_selected)
+        public ActionResult Index(string search_input, string dropdown_selected, string sortby)
         {
             var data = db.客戶聯絡人.Where(p => !p.IsDeleted).Where(p =>
             p.職稱.Contains(search_input) || p.姓名.Contains(search_input) || p.Email.Contains(search_input) ||
@@ -39,6 +39,22 @@ namespace WebApplication1.Controllers
             if (!string.IsNullOrEmpty(dropdown_selected))
             {
                 data = data.Where(p => p.職稱 == dropdown_selected).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(sortby))
+            {
+                if ("1asc".Equals(sortby)) data = data.OrderBy(p => p.職稱).ToList();
+                if ("1desc".Equals(sortby)) data = data.OrderByDescending(p => p.職稱).ToList();
+                if ("2asc".Equals(sortby)) data = data.OrderBy(p => p.姓名).ToList();
+                if ("2desc".Equals(sortby)) data = data.OrderByDescending(p => p.姓名).ToList();
+                if ("3asc".Equals(sortby)) data = data.OrderBy(p => p.Email).ToList();
+                if ("3desc".Equals(sortby)) data = data.OrderByDescending(p => p.Email).ToList();
+                if ("4asc".Equals(sortby)) data = data.OrderBy(p => p.手機).ToList();
+                if ("4desc".Equals(sortby)) data = data.OrderByDescending(p => p.手機).ToList();
+                if ("5asc".Equals(sortby)) data = data.OrderBy(p => p.電話).ToList();
+                if ("5desc".Equals(sortby)) data = data.OrderByDescending(p => p.電話).ToList();
+                if ("6asc".Equals(sortby)) data = data.OrderBy(p => p.客戶資料.客戶名稱).ToList();
+                if ("6desc".Equals(sortby)) data = data.OrderByDescending(p => p.客戶資料.客戶名稱).ToList();
             }
 
             ViewBag.search_input = search_input;
