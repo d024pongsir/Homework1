@@ -1,0 +1,13 @@
+﻿SELECT          ISNULL(a.Id, 1) AS Id, a.客戶名稱, CASE WHEN b.銀行帳戶數量 IS NULL 
+                            THEN 0 ELSE b.銀行帳戶數量 END AS 銀行帳戶數量, CASE WHEN d .聯絡人數量 IS NULL 
+                            THEN 0 ELSE d .聯絡人數量 END AS 聯絡人數量
+FROM              dbo.客戶資料 AS a LEFT OUTER JOIN
+                                (SELECT          a.Id, COUNT(*) AS 銀行帳戶數量
+                                  FROM               dbo.客戶資料 AS a INNER JOIN
+                                                              dbo.客戶銀行資訊 AS c ON a.Id = c.客戶Id
+                                  GROUP BY    a.Id) AS b ON a.Id = b.Id LEFT OUTER JOIN
+                                (SELECT          a.Id, COUNT(*) AS 聯絡人數量
+                                  FROM               dbo.客戶資料 AS a INNER JOIN
+                                                              dbo.客戶聯絡人 AS c ON a.Id = c.客戶Id
+                                  GROUP BY    a.Id) AS d ON a.Id = d.Id
+GO
