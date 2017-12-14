@@ -8,11 +8,55 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Models;
 
+using WebApplication1.Models.CustomResults;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Data;
+
 namespace WebApplication1.Controllers
 {
     public class 客戶銀行資訊Controller : Controller
     {
         private ClientEntities db = new ClientEntities();
+
+        private JArray GetExportData(List<客戶銀行資訊> data)
+        {
+            JArray jObjects = new JArray();
+
+            foreach (var item in data)
+            {
+                var jo = new JObject();
+                jo.Add("Id", item.Id);
+                jo.Add("客戶Id", item.客戶Id);
+                jo.Add("銀行名稱", item.銀行名稱);
+                jo.Add("銀行代碼", item.銀行代碼);
+                jo.Add("分行代碼", item.分行代碼);
+                jo.Add("帳戶名稱", item.帳戶名稱);
+                jo.Add("帳戶號碼", item.帳戶號碼);
+                jObjects.Add(jo);
+            }
+            return jObjects;
+        }
+
+        public ActionResult GetAllExcelDataPengVersion(string search_input)
+        {
+            var data = db.客戶銀行資訊.Include(path => path.客戶資料).Where(p => !p.IsDeleted).ToList();
+            if (!string.IsNullOrEmpty(search_input))
+            {
+                data = data.Where(p => p.銀行名稱.Contains(search_input)).ToList();
+            }
+
+            var exportSpource = this.GetExportData(data);
+            var dt = JsonConvert.DeserializeObject<DataTable>(exportSpource.ToString());
+
+            var exportFileName = string.Concat(
+                "客戶銀行資訊_",
+                DateTime.Now.ToString("yyyyMMddHHmmss"),
+                ".xlsx");
+
+            ExportExcelPeng nv = new ExportExcelPeng("客戶銀行資料", exportFileName, dt);
+            return nv.取得FileStreamResult();
+        }
 
         // GET: 客戶銀行資訊
         public ActionResult Index()
@@ -25,9 +69,14 @@ namespace WebApplication1.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult Index(string search_input)
         {
-            var 客戶銀行資訊 = db.客戶銀行資訊.Include(path => path.客戶資料).Where(p => p.銀行名稱.Contains(search_input) && !p.IsDeleted);
+            var data = db.客戶銀行資訊.Include(path => path.客戶資料).Where(p => !p.IsDeleted).ToList();
+            if (!string.IsNullOrEmpty(search_input))
+            {
+                data = data.Where(p => p.銀行名稱.Contains(search_input)).ToList();
+            }
+
             ViewBag.search_input = search_input;
-            return View(客戶銀行資訊.ToList());
+            return View(data.ToList());
         }
 
         // GET: 客戶銀行資訊/Details/5

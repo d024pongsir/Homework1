@@ -24,6 +24,8 @@
 
     <input id="sortby" name="sortby" type="hidden" value="@ViewBag.sortby" />
 
+    @Html.ActionLink("下載客戶聯絡人資料", "GetAllExcelDataPengVersion", new { search_input = ViewBag.search_input, sortby = ViewBag.sortby, dropdown_selected = ViewBag.dropdown_selected })
+
 <table class="table">
     <tr>
         <th>

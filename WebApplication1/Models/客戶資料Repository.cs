@@ -24,7 +24,7 @@ namespace WebApplication1.Models
         public IQueryable<客戶資料> 資料篩選邏輯寫在repo類別內(string search_input, string dropdown_selected, string sortby)
         {
             var data = All();
-            if (!string.IsNullOrEmpty(dropdown_selected))
+            if (!string.IsNullOrEmpty(search_input))
             {
                 data = data.Where(p => p.客戶名稱.Contains(search_input) || p.統一編號.Contains(search_input) ||
                 p.電話.Contains(search_input) || p.傳真.Contains(search_input) ||

@@ -14,6 +14,7 @@
 {
     <input type="text" name="search_input" value="@ViewBag.search_input"/>
     <input type="submit" value="搜尋" class="btn btn-default" />
+    @Html.ActionLink("下載客戶銀行資料", "GetAllExcelDataPengVersion", new { search_input = ViewBag.search_input })
 }
 <table class="table">
     <tr>
